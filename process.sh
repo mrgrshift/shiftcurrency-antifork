@@ -5,6 +5,7 @@
 
 SHIFT_SCREEN="shift"
 ANTIFORK_LOG=~/shift/logs/antifork.log
+ANTIFORK_COUNT=~/shift/logs/antifork_count.log
 
 if [ ! -f ~/shift/app.js ]; then
   echo "Error: No shift installation detected. Exiting."
@@ -16,6 +17,9 @@ function antifork_log_validation(){
   	  NOW=$(date +"%d-%m-%Y")
   	  echo "Antifork-log $NOW" > $ANTIFORK_LOG
   	  echo "--------------------------------------------------" >> $ANTIFORK_LOG
+	fi
+	if [ ! -f $ANTIFORK_COUNT ]; then
+	  echo "0" > $ANTIFORK_COUNT
 	fi
 }
 
@@ -30,6 +34,9 @@ while read line ; do
         echo "Fork found ($TIME): $line"
 	antifork_log_validation
 	echo "Fork found ($TIME): $line" >> $ANTIFORK_LOG
+	counter=$(<$ANTIFORK_COUNT)
+	((counter++))
+	echo counter > $ANTIFORK_COUNT
     fi
 
        echo "$line" | grep "\"cause\":2"
