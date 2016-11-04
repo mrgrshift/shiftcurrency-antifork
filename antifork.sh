@@ -20,7 +20,6 @@ function antifork_log_validation(){
 
 function run(){
 	#star process.sh
-	chmod u+x ~/shiftcurrency-antifork/process.sh
 	screen -dmS antifork bash -c '~/shiftcurrency-antifork/process.sh; exec bash'
 	echo "antifork started in a detached screen.."
 }
