@@ -7,6 +7,6 @@ Script to detect forks, create logs and fork-cause2 recovery, automate failover
 	- If you want failover you need to have an extra syncroized server.
 
 #Installation
-Â`bash install.sh`
+`bash install.sh`
 
 
