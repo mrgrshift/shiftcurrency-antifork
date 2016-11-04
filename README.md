@@ -9,6 +9,7 @@ Script to detect forks, create logs and fork-cause2 recovery, automate failover
 
 #Installation
 	- git clone https://github.com/mrgrshift/shiftcurrency-antifork
+	- cd shiftcurrency-antifork/
 	- bash install.sh
 
 
