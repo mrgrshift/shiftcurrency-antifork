@@ -1,3 +1,10 @@
+
+
+
+#created by mrgr. Please consider to vote for mrgr delegates
+
+
+
 ANTIFORK_LOG=~/shift/logs/antifork.log
 ANTIFORK_COUNT=~/shift/logs/antifork_count.log
 
@@ -63,3 +70,7 @@ while read line ; do
     fi
 
 done
+
+
+
+#created by mrgr. Please consider to vote for mrgr delegates

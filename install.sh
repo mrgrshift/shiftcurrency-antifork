@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#created by mrgr. Please consider to vote for mrgr delegates
+
+
 NOW=$(date +"%H:%M")
 LOCAL_TIME=0
 echo "----------------------------------------"
@@ -147,3 +150,7 @@ read -p "Do you want to run the antifork script (y/n)?" -n 1 -r
 echo " "
 echo " "
 echo "If you want to check if your installation is complete please execute: bash antifork.sh test"
+
+
+
+#created by mrgr. Please consider to vote for mrgr delegates

@@ -1,3 +1,10 @@
+
+
+
+#created by mrgr. Please consider to vote for mrgr delegates
+
+
+
 ANTIFORK_LOG=~/shift/logs/antifork.log
 
 if [ ! -f ~/shift/app.js ]; then
@@ -123,3 +130,7 @@ case $1 in
 	fi
   ;;
 esac
+
+
+
+#created by mrgr. Please consider to vote for mrgr delegates
