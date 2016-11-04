@@ -4,6 +4,7 @@ NOW=$(date +"%H:%M")
 LOCAL_TIME=0
 echo "----------------------------------------"
 echo "Welcome to the antifork installation"
+echo "Don't forget to vote for mrgr delegates"
 echo "----------------------------------------"
 echo "Now we will set some variables."
 echo "** If at any point you want to change this, run this installer again."
@@ -44,7 +45,7 @@ echo -n "Email to (to whom the mail is sent): "
         if [[  $REPLY =~ ^[Yy]$ ]]
            then
                 echo " "
-		echo "Email information set. Alerts will sent to: $EMAIL_TO"
+		echo "Email information set. Alerts will sent to: $MG_TO"
            else
                 echo " "
 		echo "Please run again the installer"
@@ -53,7 +54,7 @@ echo -n "Email to (to whom the mail is sent): "
 
 echo " "
 echo "Now we are going to configure the failover settings."
-echo "Please enter the folling information: "
+echo "Please enter the folling information (of your extra syncronized server): "
 echo -n "IP: "
 	read IP_SERVER
 HTTP="0"
@@ -68,12 +69,13 @@ read -p "Is https enabled (y/n)?" -n 1 -r
 		HTTP="http"
            fi
 echo " "
+echo " "
+echo "Now enter the information of your delegate."
 echo -n "Insert the name of your delegate: "
 	read DELEGATE_NAME
 echo -n "Insert your delegate passphrase: "
 	read SECRET
 
-echo " "
 echo " "
 echo -n "Now enter the name of the screen you're running shift: "
 	read SCREEN_NAME
