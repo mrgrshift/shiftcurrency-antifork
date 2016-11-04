@@ -38,6 +38,8 @@ echo -n "Api key: "
 	read API_KEY
 echo -n "Email from (your Default SMTP Login):  "
 	read MG_FROM
+echo -n "Enter your API Base URL: "
+	read MAILGUN
 echo -n "Email to (to whom the mail is sent): "
 	read MG_TO
 
@@ -80,15 +82,15 @@ echo " "
 echo -n "Now enter the name of the screen you're running shift: "
 	read SCREEN_NAME
 
-#process.sh
-initfile=~/shiftcurrency-antifork/proc.sh
-processfile=~/shiftcurrency-antifork/process.sh
-
+#antifork.sh
+initfile=~/shiftcurrency-antifork/antifork
+processfile=~/shiftcurrency-antifork/antifork.sh
 echo " "
 echo "#!/bin/bash" > $processfile
 echo "SHIFT_SCREEN=\"$SCREEN_NAME\"" >> $processfile
 echo "API_KEY=\"$API_KEY\"" >> $processfile
 echo "MG_FROM=\"$MG_FROM\"" >> $processfile
+echo "MAILGUN=\"$MAILGUN/messages\"" >> $processfile
 echo "MG_TO=\"$MG_TO\"" >> $processfile
 echo "MG_SUBJECT=\"$DELEGATE_NAME in Fork - failover activated successfully\"" >> $processfile
 echo "MG_TEXT=\"Description of the alert\"" >> $processfile
@@ -99,6 +101,32 @@ echo "HTTP=\"$HTTP\"" >> $processfile
 echo "PORT=\"$PORT\"" >> $processfile
 echo "SECRET=\"$SECRET\"" >> $processfile
 echo "URL=\"$HTTP://$IP_SERVER:$PORT/api/delegates/forging/enable\"" >> $processfile
+echo "URL_DISABLE=\"$HTTP://$IP_SERVER:$PORT/api/delegates/forging/disable\"" >> $processfile
+
+cat $initfile >>  $processfile
+
+
+#process.sh
+initfile=~/shiftcurrency-antifork/proc.sh
+processfile=~/shiftcurrency-antifork/process.sh
+
+echo " "
+echo "#!/bin/bash" > $processfile
+echo "SHIFT_SCREEN=\"$SCREEN_NAME\"" >> $processfile
+echo "API_KEY=\"$API_KEY\"" >> $processfile
+echo "MG_FROM=\"$MG_FROM\"" >> $processfile
+echo "MAILGUN=\"$MAILGUN/messages\"" >> $processfile
+echo "MG_TO=\"$MG_TO\"" >> $processfile
+echo "MG_SUBJECT=\"$DELEGATE_NAME in Fork - failover activated successfully\"" >> $processfile
+echo "MG_TEXT=\"Description of the alert\"" >> $processfile
+echo "DELEGATE_NAME=\"$DELEGATE_NAME\"" >> $processfile
+echo "OFFSET=\"$scale\"" >> $processfile
+echo "IP_SERVER=\"$IP_SERVER\"" >> $processfile
+echo "HTTP=\"$HTTP\"" >> $processfile
+echo "PORT=\"$PORT\"" >> $processfile
+echo "SECRET=\"$SECRET\"" >> $processfile
+echo "URL=\"$HTTP://$IP_SERVER:$PORT/api/delegates/forging/enable\"" >> $processfile
+echo "URL_DISABLE=\"$HTTP://$IP_SERVER:$PORT/api/delegates/forging/disable\"" >> $processfile
 
 cat $initfile >>  $processfile
 
@@ -116,3 +144,6 @@ read -p "Do you want to run the antifork script (y/n)?" -n 1 -r
 		echo " "
 		echo "To start Run : bash antifork.sh"
            fi
+echo " "
+echo " "
+echo "If you want to check if your installation is complete please execute: bash antifork.sh test"
