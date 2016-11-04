@@ -86,7 +86,7 @@ echo -n "Now enter the name of the screen you're running shift: "
 	read SCREEN_NAME
 
 #antifork.sh
-initfile=~/shiftcurrency-antifork/antifork
+initfile=~/shiftcurrency-antifork/init.sh
 processfile=~/shiftcurrency-antifork/antifork.sh
 echo " "
 echo "#!/bin/bash" > $processfile
