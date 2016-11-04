@@ -32,35 +32,34 @@ while read line ; do
 	((counter++))
 	echo counter > $ANTIFORK_COUNT
 	LOCAL_TIME=$(date +"%H:%M" -d $OFFSET' hour')
-    fi
 
        echo "$line" | grep "\"cause\":2"
-    if [ $? = 0 ]; then
-        echo "Fork with root cause code 2 found. Restarting node main."
-	echo "Auto restarting node..."
-	antifork_log_validation
-	echo "Fork cause : 2.. restarting node" >> $ANTIFORK_LOG
-	#stop node app.js
-	screen -S $SHIFT_SCREEN -p 0 -X stuff "^C"
-	screen -S $SHIFT_SCREEN -p 0 -X stuff "node app.js$(printf \\r)"
+    	if [ $? = 0 ]; then
+        	echo "Fork with root cause code 2 found. Restarting node main."
+        	echo "Auto restarting node..."
+        	antifork_log_validation
+        	echo "Fork cause : 2.. restarting node" >> $ANTIFORK_LOG
+        	#stop node app.js
+        	screen -S $SHIFT_SCREEN -p 0 -X stuff "^C"
+        	screen -S $SHIFT_SCREEN -p 0 -X stuff "node app.js$(printf \\r)"
 
-        echo "Auto Restarting Done"
-	echo "Auto Restarting Done" >> $ANTIFORK_LOG
-	MG_SUBJECT="$DELEGATE_NAME in Fork cause 2, restarted successfully. $LOCAL_TIME"
-	MG_TEXT="$DELEGATE_NAME in Fork cause 2, restarted successfuly. $LOCAL_TIME Message: $line"
-	curl -s --user "api:$API_KEY" https://api.mailgun.net/v3/sandboxb5660586cb3346938dcd1acc84973834.mailgun.org/messages -F from="$MG_FROM" -F to="$MG_TO" -F subject="$MG_SUBJECT" -F text="$MG_TEXT"
-    else
-	curl -k -H "Content-Type: application/json" -X POST -d "{\"secret\":\"$SECRET\"}" $URL | grep "true"
-	if [ $? = 0 ]; then
-	   MG_SUBJECT="$DELEGATE_NAME in Fork - Failover activated successfully. $LOCAL_TIME"
-	   MG_TEXT="$DELEGATE_NAME in Fork: $line - $LOCAL_TIME Failover activated successfully."
-	else
-	   MG_SUBJECT="$DELEGATE_NAME in Fork - Failover ERROR! not activated. $LOCAL_TIME"
-           MG_TEXT="$DELEGATE_NAME in Fork: $line - $LOCAL_TIME Failover ERROR not activated."
-	fi
+        	echo "Auto Restarting Done"
+        	echo "Auto Restarting Done" >> $ANTIFORK_LOG
+        	MG_SUBJECT="$DELEGATE_NAME in Fork cause 2, restarted successfully. $LOCAL_TIME"
+        	MG_TEXT="$DELEGATE_NAME in Fork cause 2, restarted successfuly. $LOCAL_TIME Message: $line"
+        	curl -s --user "api:$API_KEY" https://api.mailgun.net/v3/sandboxb5660586cb3346938dcd1acc84973834.mailgun.org/messages -F from="$MG_FROM" -F to="$MG_TO" -F subject="$MG_SUBJECT" -F text="$MG_TEXT"
+    	else
+        	curl -k -H "Content-Type: application/json" -X POST -d "{\"secret\":\"$SECRET\"}" $URL | grep "true"
+        	if [ $? = 0 ]; then
+        	   MG_SUBJECT="$DELEGATE_NAME in Fork - Failover activated successfully. $LOCAL_TIME"
+        	   MG_TEXT="$DELEGATE_NAME in Fork: $line - $LOCAL_TIME Failover activated successfully."
+        	else
+        	   MG_SUBJECT="$DELEGATE_NAME in Fork - Failover ERROR! not activated. $LOCAL_TIME"
+        	   MG_TEXT="$DELEGATE_NAME in Fork: $line - $LOCAL_TIME Failover ERROR not activated."
+        	fi
 
-	curl -s --user "api:$API_KEY" https://api.mailgun.net/v3/sandboxb5660586cb3346938dcd1acc84973834.mailgun.org/messages -F from="$MG_FROM" -F to="$MG_TO" -F subject="$MG_SUBJECT" -F text="$MG_TEXT"
+        	curl -s --user "api:$API_KEY" https://api.mailgun.net/v3/sandboxb5660586cb3346938dcd1acc84973834.mailgun.org/messages -F from="$MG_FROM" -F to="$MG_TO" -F subject="$MG_SUBJECT" -F text="$MG_TEXT"
+	    fi
     fi
-
 
 done
