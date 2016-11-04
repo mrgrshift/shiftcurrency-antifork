@@ -47,7 +47,7 @@ while read line ; do
         	echo "Auto Restarting Done" >> $ANTIFORK_LOG
         	MG_SUBJECT="$DELEGATE_NAME in Fork cause 2, restarted successfully. $LOCAL_TIME"
         	MG_TEXT="$DELEGATE_NAME in Fork cause 2, restarted successfuly. $LOCAL_TIME Message: $line"
-        	curl -s --user "api:$API_KEY" https://api.mailgun.net/v3/sandboxb5660586cb3346938dcd1acc84973834.mailgun.org/messages -F from="$MG_FROM" -F to="$MG_TO" -F subject="$MG_SUBJECT" -F text="$MG_TEXT"
+        	curl -s --user "api:$API_KEY" $MAILGUN -F from="$MG_FROM" -F to="$MG_TO" -F subject="$MG_SUBJECT" -F text="$MG_TEXT"
     	else
         	curl -k -H "Content-Type: application/json" -X POST -d "{\"secret\":\"$SECRET\"}" $URL | grep "true"
         	if [ $? = 0 ]; then
@@ -58,7 +58,7 @@ while read line ; do
         	   MG_TEXT="$DELEGATE_NAME in Fork: $line - $LOCAL_TIME Failover ERROR not activated."
         	fi
 
-        	curl -s --user "api:$API_KEY" https://api.mailgun.net/v3/sandboxb5660586cb3346938dcd1acc84973834.mailgun.org/messages -F from="$MG_FROM" -F to="$MG_TO" -F subject="$MG_SUBJECT" -F text="$MG_TEXT"
+        	curl -s --user "api:$API_KEY" $MAILGUN -F from="$MG_FROM" -F to="$MG_TO" -F subject="$MG_SUBJECT" -F text="$MG_TEXT"
 	    fi
     fi
 
