@@ -15,12 +15,24 @@ OFF='\033[0m' # No Color
 
 NOW=$(date +"%H:%M")
 LOCAL_TIME=0
+OK=1
 echo "----------------------------------------"
 echo "Welcome to the antifork installation"
 echo -e "Don't forget to vote for ${YELLOW}mrgr${OFF} delegates"
 echo "----------------------------------------"
 echo "Now we will set some variables."
 echo "** If at any point you want to change this, run this installer again."
+echo " "
+if [ -f "config.sh" ]; then
+	read -p "**A previous installation was detected, do you want to proceed (y/n)?" -n 1 -r
+	if [[  $REPLY =~ ^[Nn]$ ]]
+	   then
+		OK=0
+	fi
+fi
+
+if [[  $OK -eq 1 ]]
+   then
 echo " "
 echo "This is the local time from your server: $NOW"
 OK=0
@@ -144,6 +156,8 @@ echo -e "If you want to change any of the variables edit the file ${CYAN}config.
 echo " "
 echo " "
 echo " "
+###
+fi
 
 #REBOOT DETECT/STARTUP SCRIPT
 echo "=============================================================="
@@ -172,29 +186,29 @@ read -p "Do you want to proceed (y/n)?" -n 1 -r
         	      then
         	           echo "You selected option 1."
 			   echo -n "Configuring... "
-			   echo "#!/bin/sh" >  /etc/rc6.d/K99_script
-			   echo "source $(pwd)/config.sh" >> /etc/rc6.d/K99_script
-			   echo "curl -k -H \"Content-Type: application/json\" -X POST -d \"{\\"secret\\":\\"$SECRET\\"}\" $URL | grep \"true\"" >> /etc/rc6.d/K99_script
-                	   echo "if [ $? = 0 ]; then" >> /etc/rc6.d/K99_script
-			   echo "failover_result=\"successfully executed\"" >> /etc/rc6.d/K99_script
-			   echo "else" >> /etc/rc6.d/K99_script
-			   echo "failover_result=\"error not executed\"" >> /etc/rc6.d/K99_script
-			   echo "fi" >> /etc/rc6.d/K99_script
-			   echo "MG_SUBJECT=\"$DELEGATE_NAME rebooting. Failover $failover_result $LOCAL_TIME\"" >> /etc/rc6.d/K99_script
-                	   echo "MG_TEXT=\"$DELEGATE_NAME rebooting. Failover $failover_result $LOCAL_TIME\"" >> /etc/rc6.d/K99_script
-                	   echo "curl -s --user \"api:$API_KEY\" $MAILGUN -F from=\"$MG_FROM\" -F to=\"$MG_TO\" -F subject=\"$MG_SUBJECT\" -F text=\"$MG_TEXT\"" >> /etc/rc6.d/K99_script
-			   echo "exit 0" >> /etc/rc6.d/K99_script
+			   echo "#!/bin/sh" >  /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
+			   echo "source $(pwd)/config.sh" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
+			   echo "curl -k -H \"Content-Type: application/json\" -X POST -d \"{\\"secret\\":\\"$SECRET\\"}\" $URL | grep \"true\"" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
+                	   echo "if [ $? = 0 ]; then" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
+			   echo "failover_result=\"successfully executed\"" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
+			   echo "else" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
+			   echo "failover_result=\"error not executed\"" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
+			   echo "fi" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
+			   echo "MG_SUBJECT=\"$DELEGATE_NAME rebooting. Failover $failover_result $LOCAL_TIME\"" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
+                	   echo "MG_TEXT=\"$DELEGATE_NAME rebooting. Failover $failover_result $LOCAL_TIME\"" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
+                	   echo "curl -s --user \"api:$API_KEY\" $MAILGUN -F from=\"$MG_FROM\" -F to=\"$MG_TO\" -F subject=\"$MG_SUBJECT\" -F text=\"$MG_TEXT\"" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
+			   echo "exit 0" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
 			   sudo chmod +x /etc/rc6.d/K99_script
 			   echo "done"
         	      else
                            echo "You select 2."
                            echo -n "Configuring... "
-                           echo "#!/bin/sh" >  /etc/rc6.d/K99_script
-                           echo "source $(pwd)/config.sh" >> /etc/rc6.d/K99_script
-                           echo "MG_SUBJECT=\"$DELEGATE_NAME rebooting. No Failover selected $LOCAL_TIME\"" >> /etc/rc6.d/K99_script
-                           echo "MG_TEXT=\"$DELEGATE_NAME rebooting. No Failover selected $LOCAL_TIME\"" >> /etc/rc6.d/K99_script
-                           echo "curl -s --user \"api:$API_KEY\" $MAILGUN -F from=\"$MG_FROM\" -F to=\"$MG_TO\" -F subject=\"$MG_SUBJECT\" -F text=\"$MG_TEXT\"" >> /etc/rc6.d/K99_script
-                           echo "exit 0" >> /etc/rc6.d/K99_script
+                           echo "#!/bin/sh" >  /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
+                           echo "source $(pwd)/config.sh" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
+                           echo "MG_SUBJECT=\"$DELEGATE_NAME rebooting. No Failover selected $LOCAL_TIME\"" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
+                           echo "MG_TEXT=\"$DELEGATE_NAME rebooting. No Failover selected $LOCAL_TIME\"" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
+                           echo "curl -s --user \"api:$API_KEY\" $MAILGUN -F from=\"$MG_FROM\" -F to=\"$MG_TO\" -F subject=\"$MG_SUBJECT\" -F text=\"$MG_TEXT\"" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
+                           echo "exit 0" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
                            sudo chmod +x /etc/rc6.d/K99_script
 
 				#startup script
