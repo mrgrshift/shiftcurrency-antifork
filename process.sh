@@ -6,6 +6,11 @@
 
 
 
+if [ ! -f config.sh ]; then
+  echo "Error: Can't execute antifork. First run: bash install.sh"
+  exit 1
+fi
+
 source config.sh
 
 if [ ! -f ~/shift/app.js ]; then
