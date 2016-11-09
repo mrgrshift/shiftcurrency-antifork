@@ -220,25 +220,26 @@ read -p "Do you want to proceed (y/n)?" -n 1 -r
 		        if [[  $REPLY =~ ^[Nn]$ ]]
 		           then
 				echo -n "Configuring newer version... "
-				echo "[Unit]" > /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null
-				echo " Description=/etc/rc.local Compatibility" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null
-				echo " ConditionPathExists=/etc/rc.local" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null
+				echo "echo \"[Unit]\" > /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null" > temp.sh
+				echo "echo \" Description=/etc/rc.local Compatibility\" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
+				echo "echo \" ConditionPathExists=/etc/rc.local\" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
 
-				echo "[Service]" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null
-				echo " Type=forking" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null
-				echo " ExecStart=/etc/rc.local start" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null
-				echo " TimeoutSec=0" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null
-				echo " StandardOutput=tty" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null
-				echo " RemainAfterExit=yes" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null
-				echo " SysVStartPriority=99" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null
+				echo "echo \"[Service]\" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
+				echo "echo \" Type=forking\" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
+				echo "echo \" ExecStart=/etc/rc.local start\" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
+				echo "echo \" TimeoutSec=0\" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
+				echo "echo \" StandardOutput=tty\" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
+				echo "echo \" RemainAfterExit=yes\" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
+				echo "echo \" SysVStartPriority=99\" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
 
-				echo "[Install]" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null
-				echo " WantedBy=multi-user.target" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null
-
+				echo "echo \"[Install]\" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
+				echo "echo \" WantedBy=multi-user.target\" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
+				sudo bash temp.sh
 				sudo chmod +x /etc/rc.local
 				sudo systemctl enable rc-local
 				sudo systemctl start rc-local.service
 				echo "done"
+				rm temp.sh
 			fi
 
            else
