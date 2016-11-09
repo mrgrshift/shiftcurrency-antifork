@@ -203,13 +203,25 @@ read -p "Do you want to proceed (y/n)?" -n 1 -r
         	      else
                            echo "You select 2."
                            echo -n "Configuring... "
-                           echo "#!/bin/sh" >  /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
-                           echo "source $(pwd)/config.sh" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
-                           echo "MG_SUBJECT=\"$DELEGATE_NAME rebooting. No Failover selected $LOCAL_TIME\"" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
-                           echo "MG_TEXT=\"$DELEGATE_NAME rebooting. No Failover selected $LOCAL_TIME\"" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
-                           echo "curl -s --user \"api:$API_KEY\" $MAILGUN -F from=\"$MG_FROM\" -F to=\"$MG_TO\" -F subject=\"$MG_SUBJECT\" -F text=\"$MG_TEXT\"" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
-                           echo "exit 0" >> /etc/rc6.d/K99_script | sudo tee -a /etc/rc.local > /dev/null
-                           sudo chmod +x /etc/rc6.d/K99_script
+			   USER=${USER:=$(/usr/bin/id -run)}
+			   #custom_shutdown
+                           echo "echo \"#!/bin/sh -e\" >  /etc/init.d/custom_shutdown | sudo tee -a /etc/init.d/custom_shutdown > /dev/null" > temp.sh
+			   echo "echo \"cd $(pwd)\" >>  /etc/init.d/custom_shutdown | sudo tee -a /etc/init.d/custom_shutdown > /dev/null" >> temp.sh
+			   echo "echo \"bash $(pwd)/reboot.sh > $(pwd)/reboot.log\" >>  /etc/init.d/custom_shutdown | sudo tee -a /etc/init.d/custom_shutdown > /dev/null" >> temp.sh
+			   echo "echo \"exit 0\" >>  /etc/init.d/custom_shutdown | sudo tee -a /etc/init.d/custom_shutdown > /dev/null" >> temp.sh
+				sudo bash temp.sh
+				rm temp.sh
+			   #reboot.sh
+			   echo "#!/bin/sh -e" >  reboot.sh
+			   echo "source config.sh" >> reboot.sh
+			   echo "MG_SUBJECT=\"\$DELEGATE_NAME rebooting. No Failover selected 0\"" >> reboot.sh
+			   echo "MG_TEXT=\"$DELEGATE_NAME rebooting. No Failover selected 0\"" >> reboot.sh
+			   echo "curl -s --user \"api:\$API_KEY\" \$MAILGUN -F from=\"\$MG_FROM\" -F to=\"\$MG_TO\" -F subject=\"\$MG_SUBJECT\" -F text=\"\$MG_TEXT\"" >> reboot.sh
+				sudo chmod a+x /etc/init.d/custom_shutdown
+				sudo chmod a+x reboot.sh
+				sudo ln -sf /etc/init.d/custom_shutdown /etc/rc0.d/K04custom_shutdown
+				sudo ln -sf /etc/init.d/custom_shutdown /etc/rc6.d/K04custom_shutdown
+				sudo chmod a+x /etc/rc0.d/K04custom_shutdown /etc/rc6.d/K04custom_shutdown
 
 				#startup script
 				echo "#!/bin/bash" > startup.sh
