@@ -1,5 +1,5 @@
 # shiftcurrency-antifork
-Script to detect forks, create logs, fork-cause2 recovery, automate failover
+Script to detect forks, create logs, fork-cause2 recovery, automate failover, detect reboots
 
 #Requisites
 
