@@ -202,7 +202,7 @@ read -p "Do you want to proceed (y/n)?" -n 1 -r
                            echo "#!/bin/sh -e" >  reboot.sh
                            echo "source config.sh" >> reboot.sh
 			   echo "curl -k -H \"Content-Type: application/json\" -X POST -d \"{\\"secret\\":\\"\$SECRET\\"}\" \$URL | grep \"true\"" >> reboot.sh
-			   echo "if [ $? = 0 ]; then" >> reboot.sh
+			   echo "if [ \$? = 0 ]; then" >> reboot.sh
                            echo "failover_result=\"successfully executed\"" >> reboot.sh
                            echo "else" >> reboot.sh
                            echo "failover_result=\"error not executed\"" >> reboot.sh
