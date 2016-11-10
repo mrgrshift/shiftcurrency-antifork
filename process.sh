@@ -49,7 +49,6 @@ while read line ; do
     	if [ $? = 0 ]; then
         	echo "Fork with root cause code 2 found. Restarting node main."
         	echo "Auto restarting node..."
-        	antifork_log_validation
         	echo "Fork cause : 2.. restarting node" >> $ANTIFORK_LOG
         	#stop node app.js
         	screen -S $SHIFT_SCREEN -p 0 -X stuff "^C"
@@ -61,11 +60,22 @@ while read line ; do
         	MG_TEXT="$DELEGATE_NAME in Fork cause 2, restarted successfuly. $LOCAL_TIME Message: $line"
         	curl -s --user "api:$API_KEY" $MAILGUN -F from="$MG_FROM" -F to="$MG_TO" -F subject="$MG_SUBJECT" -F text="$MG_TEXT"
     	else
+		echo "Starting failover..."
+                echo "Starting failover..." >> $ANTIFORK_LOG
+
         	curl -k -H "Content-Type: application/json" -X POST -d "{\"secret\":\"$SECRET\"}" $URL | grep "true"
         	if [ $? = 0 ]; then
+                   #stop node app.js
+                   screen -S $SHIFT_SCREEN -p 0 -X stuff "^C"
+                   echo -e "${GREEN}Failover successfully done${OFF}"
+		   echo "Shift node app.js stopped."
+                   echo "Failover successfully done. Shift node app.js stopped" >> $ANTIFORK_LOG
+
         	   MG_SUBJECT="$DELEGATE_NAME in Fork - Failover activated successfully. $LOCAL_TIME"
-        	   MG_TEXT="$DELEGATE_NAME in Fork: $line - $LOCAL_TIME Failover activated successfully."
+        	   MG_TEXT="$DELEGATE_NAME in Fork: $line - $LOCAL_TIME Failover activated successfully. And shift node app.js has been stopped."
         	else
+		   echo -e "${RED}Failover not activated!${OFF}"
+                   echo "Failover not activated!" >> $ANTIFORK_LOG
         	   MG_SUBJECT="$DELEGATE_NAME in Fork - Failover ERROR! not activated. $LOCAL_TIME"
         	   MG_TEXT="$DELEGATE_NAME in Fork: $line - $LOCAL_TIME Failover ERROR not activated."
         	fi
