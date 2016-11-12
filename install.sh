@@ -136,6 +136,7 @@ echo "ANTIFORK_LOG=~/shift/logs/antifork.log" >> $init
 echo "ANTIFORK_COUNT=~/shift/logs/antifork_count.log" >> $init
 
 chmod u+x ~/shiftcurrency-antifork/process.sh
+chmod u+x ~/shiftcurrency-antifork/antifork.sh
 
 echo " "
 echo -e "${CYAN}ALL VARIABLES SET${OFF}"
@@ -185,7 +186,7 @@ read -p "Do you want to proceed (y/n)?" -n 1 -r
                            #custom_shutdown
                            echo "echo \"#!/bin/sh -e\" >  /etc/init.d/custom_shutdown | sudo tee -a /etc/init.d/custom_shutdown > /dev/null" > temp.sh
                            echo "echo \"cd $(pwd)\" >>  /etc/init.d/custom_shutdown | sudo tee -a /etc/init.d/custom_shutdown > /dev/null" >> temp.sh
-		           echo "echo \"bash $(pwd)/reboot.sh > $(pwd)/reboot.log\" >>  /etc/init.d/custom_shutdown | sudo tee -a /etc/init.d/custom_shutdown > /dev/null" >> temp.sh
+		           echo "echo \"bash $(pwd)/reboot.sh >> $(pwd)/reboot.log\" >>  /etc/init.d/custom_shutdown | sudo tee -a /etc/init.d/custom_shutdown > /dev/null" >> temp.sh
                            echo "echo \"exit 0\" >>  /etc/init.d/custom_shutdown | sudo tee -a /etc/init.d/custom_shutdown > /dev/null" >> temp.sh
                                 sudo bash temp.sh
                                 rm temp.sh
@@ -230,9 +231,10 @@ read -p "Do you want to proceed (y/n)?" -n 1 -r
 				echo "cd $(pwd)/../shift/" >> startup.sh
 				echo "node $(pwd)/../shift/app.js" >> startup.sh
 				sudo chmod u+x startup.sh
-				echo "echo \"#!/bin/sh -e\" > /etc/rc.local | sudo tee -a /etc/rc.local > /dev/null" > temp.sh
-				echo "echo \"/bin/su $USER -c \\\"cd $(pwd); /usr/bin/screen -dmS shift bash -c $(pwd)/startup.sh'; exec bash'\\\" >> /etc/rc.local\" | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh 
-				echo "echo \"exit 0\" >> /etc/rc.local | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
+				echo "echo \"#!/bin/sh -e\" >> $(pwd)/startup.log | sudo tee -a /etc/rc.local > /dev/null" > temp.sh
+				echo "echo \"/bin/su $USER -c \\\"cd $(pwd); /usr/bin/screen -dmS shift bash -c $(pwd)/startup.sh'; exec bash'\\\" >> $(pwd)/startup.log\" | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh 
+                                echo "echo \"/bin/su $USER -c \\\"cd $(pwd); bash -c $(pwd)/antifork.sh'; exec bash'\\\" >> $(pwd)/startup.log\" | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
+				echo "echo \"exit 0\" >> $(pwd)/startup.log | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
 				sudo bash temp.sh
 				echo -e "done.";
 				rm temp.sh
@@ -254,6 +256,7 @@ read -p "Do you want to proceed (y/n)?" -n 1 -r
 				echo "echo \"[Service]\" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
 				echo "echo \" Type=forking\" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
 				echo "echo \" ExecStart=/etc/rc.local start\" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
+                                echo "echo \" ExecStop=/etc/init.d/custom_shutdown\" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
 				echo "echo \" TimeoutSec=0\" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
 				echo "echo \" StandardOutput=tty\" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
 				echo "echo \" RemainAfterExit=yes\" >> /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
