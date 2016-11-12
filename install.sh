@@ -245,8 +245,8 @@ read -p "Do you want to proceed (y/n)?" -n 1 -r
         	   fi
 		done
 
-		read -p "Are you in Ubuntu 14.04 (y/n)?" -n 1 -r
-		        if [[  $REPLY =~ ^[Nn]$ ]]
+		DISTR=$(cat /etc/lsb-release | grep "DISTRIB_RELEASE")
+		        if [  "$DISTR" != "DISTRIB_RELEASE=14.04" ]
 		           then
 				echo -n "Configuring newer version... "
 				echo "echo \"[Unit]\" > /etc/systemd/system/rc-local.service | sudo tee -a /etc/rc.local > /dev/null" > temp.sh
