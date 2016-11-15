@@ -231,10 +231,11 @@ read -p "Do you want to proceed (y/n)?" -n 1 -r
 				echo "cd $(pwd)/../shift/" >> startup.sh
 				echo "node $(pwd)/../shift/app.js" >> startup.sh
 				sudo chmod u+x startup.sh
-				echo "echo \"#!/bin/sh -e\" >> $(pwd)/startup.log | sudo tee -a /etc/rc.local > /dev/null" > temp.sh
+                                echo "sudo rm /etc/rc.local" > temp.sh
+				echo "echo \"#!/bin/sh -e\" > /etc/rc.local | sudo tee -a /etc/rc.local > /dev/null" > temp.sh
 				echo "echo \"/bin/su $USER -c \\\"cd $(pwd); /usr/bin/screen -dmS shift bash -c $(pwd)/startup.sh'; exec bash'\\\" >> $(pwd)/startup.log\" | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh 
                                 echo "echo \"/bin/su $USER -c \\\"cd $(pwd); bash -c $(pwd)/antifork.sh'; exec bash'\\\" >> $(pwd)/startup.log\" | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
-				echo "echo \"exit 0\" >> $(pwd)/startup.log | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
+				echo "echo \"exit 0\" >> /etc/rc.local | sudo tee -a /etc/rc.local > /dev/null" >> temp.sh
 				sudo bash temp.sh
 				echo -e "done.";
 				rm temp.sh
