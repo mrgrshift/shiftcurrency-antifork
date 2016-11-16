@@ -49,7 +49,7 @@ show_log(){
 
 
 make_antifork_test(){
-	echo "This test will enable forging and disable it into your extra syncronized server. This to ensure your delegate node is capable to do this commands."
+	echo "This test will enable forging and disable it into your extra synchronized server. This to ensure your delegate node is capable to do this commands."
 
         read -p "Do you want to continue (y/n)?" -n 1 -r
         if [[  $REPLY =~ ^[Yy]$ ]]
@@ -107,6 +107,81 @@ make_antifork_test(){
 }
 
 
+do_forge_off(){
+	echo "This action will disable forging in this node and enable forging into your extra synchronized server."
+
+        read -p "Do you want to continue (y/n)?" -n 1 -r
+        if [[  $REPLY =~ ^[Yy]$ ]]
+           then
+		echo " "
+                RESPONSE=`curl -s -k -H "Content-Type: application/json" -X POST -d "{\"secret\":\"$SECRET\"}" $URL_LOCAL_DISABLE`
+                echo $RESPONSE | grep "true" > /dev/null
+                if [ $? = 0 ]; then
+                   echo -e "${GREEN}Forging on localhost has been disabled.${OFF}"
+                	RESPONSE=`curl -s -k -H "Content-Type: application/json" -X POST -d "{\"secret\":\"$SECRET\"}" $URL`
+                	echo $RESPONSE | grep "true" > /dev/null
+               		if [ $? = 0 ]; then
+        	           echo -e "${GREEN}Forging in remote server enabled successfully.${OFF}"
+ 	                else
+                	   echo -e "${RED}Error:${OFF} $RESPONSE"
+        	           echo -e "${RED}***Something is wrong, please run again bash install.sh and make sure you have entered the right information.${OFF}"
+                	   RESPONSE=`curl -s -k -H "Content-Type: application/json" -X POST -d "{\"secret\":\"$SECRET\"}" $URL_LOCAL`
+                	   echo $RESPONSE | grep "true" > /dev/null
+        	           if [ $? = 0 ]; then
+	                      echo "Forging on localhost enabled."
+			   else
+			      echo "Check your localhost node. Please manually enable it."
+			   fi
+	                fi
+                else
+                   echo -e "${RED}Error:${OFF} $RESPONSE"
+                   echo -e "${RED}***Something is wrong, please run again bash install.sh and make sure you have entered the right information.${OFF}"
+                fi
+	   else
+		echo ".... forge_off action canceled."
+	fi
+}
+
+
+
+do_forge_on(){
+        echo "This action will disable forging in your extra synchronized server and enable forging in this node."
+
+        read -p "Do you want to continue (y/n)?" -n 1 -r
+        if [[  $REPLY =~ ^[Yy]$ ]]
+           then
+                echo " "
+                RESPONSE=`curl -s -k -H "Content-Type: application/json" -X POST -d "{\"secret\":\"$SECRET\"}" $URL_DISABLE`
+                echo $RESPONSE | grep "true" > /dev/null
+                if [ $? = 0 ]; then
+                   echo -e "${GREEN}Forging on remote server has been disabled.${OFF}"
+                        RESPONSE=`curl -s -k -H "Content-Type: application/json" -X POST -d "{\"secret\":\"$SECRET\"}" $URL_LOCAL`
+                        echo $RESPONSE | grep "true" > /dev/null
+                        if [ $? = 0 ]; then
+                           echo -e "${GREEN}Forging on localhost enabled successfully.${OFF}"
+                        else
+                           echo -e "${RED}Error:${OFF} $RESPONSE"
+                           echo -e "${RED}***Something is wrong, please run again bash install.sh and make sure you have entered the right information.${OFF}"
+                           RESPONSE=`curl -s -k -H "Content-Type: application/json" -X POST -d "{\"secret\":\"$SECRET\"}" $URL`
+                           echo $RESPONSE | grep "true" > /dev/null
+                           if [ $? = 0 ]; then
+                              echo "Forging on remote server enabled."
+                           else
+                              echo "Check your remote server node. Please manually enable it."
+                           fi
+                        fi
+                else
+                   echo -e "${RED}Error:${OFF} $RESPONSE"
+                   echo -e "${RED}***Something is wrong, please run again bash install.sh and make sure you have entered the right information.${OFF}"
+                fi
+           else
+                echo ".... forge_on action canceled."
+        fi
+}
+
+
+
+
 case $1 in
 "log")
 	show_log
@@ -125,6 +200,12 @@ case $1 in
 "test")
 	make_antifork_test
   ;;
+"forge_off")
+	do_forge_off
+  ;;
+"forge_on")
+	do_forge_on
+  ;;
 *)
 	process=$(screen -ls | grep "antifork")
 	if [[ -z $process ]]; then
@@ -135,7 +216,9 @@ case $1 in
 	  echo "    bash antifork.sh log"
 	  echo "    bash antifork.sh stop"
           echo "    bash antifork.sh status"
-	  echo "    bash antifork.sh test  <-- you can test if your antifork will work"
+	  echo "    bash antifork.sh test       <-- you can test if your antifork will work"
+	  echo "    bash antifork.sh forge_off  <-- will stop forging on main node and makes backup node take over"
+	  echo "    bash antifork.sh forge_on   <-- will stop forging on backup node and makes main node take over"
 	fi
   ;;
 esac
