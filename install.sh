@@ -271,6 +271,10 @@ read -p "Do you want to proceed (y/n)?" -n 1 -r
 				sudo chmod +x /etc/rc.local
 				sudo systemctl enable rc-local
 				sudo systemctl start rc-local.service
+				#enabling postgres at starup
+				sudo systemctl enable postgresql
+				sudo update-rc.d postgresql enable
+				sudo service postgresql start
 				echo "done"
 				rm temp.sh
 			fi
