@@ -133,7 +133,7 @@ echo "SECRET=\"$SECRET\" #Passphrase of DELEGATE_NAME" >> $init
 echo "URL=\"$HTTP://$IP_SERVER:$PORT/api/delegates/forging/enable\" #URL according variables HTTP, PORT and IP_SERVER" >> $init
 echo "URL_DISABLE=\"$HTTP://$IP_SERVER:$PORT/api/delegates/forging/disable\"" >> $init
 echo "URL_LOCAL=\"$HTTP://localhost:$PORT/api/delegates/forging/enable\"" >> $init
-echo "URL__LOCAL_DISABLE=\"$HTTP://localhost:$PORT/api/delegates/forging/disable\"" >> $init
+echo "URL_LOCAL_DISABLE=\"$HTTP://localhost:$PORT/api/delegates/forging/disable\"" >> $init
 echo "ANTIFORK_LOG=~/shift/logs/antifork.log" >> $init
 echo "ANTIFORK_COUNT=~/shift/logs/antifork_count.log" >> $init
 
