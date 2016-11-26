@@ -36,7 +36,7 @@ This script needs to be running in your backup node.<br>
 Will be watching for the node(s) you specify. For example your main1 node is running good but, what happen if suddenly stops?
 Your server went out of memory and collapsed all the applications including SHIFT. 
 And the server has no more memory to act.
-With this script your backup node will actively respond, in the moment he sees that main1 loses 1 block he will activate the forged locally.<br>
+Your backup node will actively respond with this script , in the moment he sees that main1 loses 1 block he will activate the forged locally.<br>
 To activate vigilant mode execute:<br>
 ```
 Developing..
