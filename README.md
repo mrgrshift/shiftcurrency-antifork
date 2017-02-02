@@ -1,5 +1,5 @@
 # shiftcurrency-antifork
-Script to detect forks, create logs, fork-cause2 recovery, automate failover, detect reboots, start at boot node app.js, manual take-over, activate guard
+This script is outdated, please go to [shift-diehard] (https://github.com/mrgrshift/shift-diehard). **shift-diehard** is for new Shift v6 versions and above.
 
 #Requisites
 
@@ -39,7 +39,7 @@ And the server has no more memory to act.
 Your backup node will actively respond with this script , in the moment he sees that main1 loses 1 block he will activate the forged locally.<br>
 To activate vigilant mode execute:<br>
 ```
-Developing..
+New features in https://github.com/mrgrshift/shift-diehard
 ```
 
 <br>
